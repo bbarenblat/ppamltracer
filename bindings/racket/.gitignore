@@ -1,0 +1,16 @@
+# .gitignore for ppamltracer-racket                                 -*- conf -*-
+
+# Bytecode
+compiled/
+*.dep
+*.zo
+
+# Scribble
+manual/
+*.html
+*.tex
+*.pdf
+racket.css
+scribble.css
+scribble-style.css
+scribble-common.js

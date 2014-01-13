@@ -1,0 +1,11 @@
+			  ppamltracer-python, v0.1.0
+
+This package provides Python bindings to ppamltracer.  They require Python 2.7.
+
+This package uses distutils for installation; you can run
+
+    python setup.py install
+
+to install the package.
+
+For examples of use, see the examples directory.

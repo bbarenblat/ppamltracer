@@ -1,0 +1,7 @@
+# .gitignore for ppamltracer-java                                  -*- conf -*-
+
+build/
+dist/
+
+# Examples
+examples/dist

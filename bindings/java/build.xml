@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- build.xml: Ant build file for ppamltracer
+Copyright (C) 2014  Galois, Inc.
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <http://www.gnu.org/licenses/>.
+
+To contact Galois, complete the Web form at <http://corp.galois.com/contact/>
+or write to Galois, Inc., 421 Southwest 6th Avenue, Suite 300, Portland,
+Oregon, 97204-1622. -->
+
+<project name="ppamltracer-java" basedir="." default="link-and-package">
+
+  <property name="project.shortname" value="ppamltracer" />
+  <property name="project.version" value="0.1.0" />
+  <property name="package" value="com.galois.ppaml.tracer" />
+
+  <property name="src" location="src" />
+  <property name="src.java" location="${src}/java" />
+  <property name="src.c" location="${src}/c" />
+
+  <property name="build" location="build" />
+  <property name="build.classes" location="${build}/classes" />
+  <property name="build.native" location="${build}/native" />
+
+  <property name="dist" location="dist" />
+  <property name="doc" location="${dist}/doc" />
+
+  <target name="java.compile">
+    <mkdir dir="${build.classes}" />
+    <javac srcdir="${src}"
+           destdir="${build.classes}"
+           includeantruntime="false" />
+  </target>
+
+  <target name="java.package" depends="java.compile">
+    <mkdir dir="${dist}" />
+    <jar destfile="${dist}/${project.shortname}-${project.version}.jar"
+         basedir="${build.classes}" />
+  </target>
+
+  <!-- Assemble the native sources with their JNI-generated headers. -->
+  <target name="native.prepare" depends="java.compile">
+    <copy todir="${build.native}">
+      <fileset dir="${src.c}" />
+    </copy>
+    <javah classpath="${build.classes}"
+           class="${package}.Tracer,${package}.Phase"
+           destdir="${build.native}"
+           verbose="yes" />
+  </target>
+
+  <!-- Do the autotools dance. -->
+  <target name="native.autotools" depends="native.prepare">
+    <mkdir dir="${build.native}/m4" />
+    <exec executable="autoreconf"
+          dir="${build.native}"
+          failonerror="true">
+      <arg value="--install" />
+      <arg value="-Wall" />
+    </exec>
+  </target>
+
+  <target name="native.compile" depends="native.autotools">
+    <exec executable="./configure"
+          dir="${build.native}"
+          failonerror="true">
+      <arg value="--prefix=${dist}" />
+    </exec>
+    <exec executable="make" dir="${build.native}" failonerror="true" />
+  </target>
+
+  <target name="native.install" depends="native.compile">
+    <mkdir dir="${dist}" />
+    <exec executable="make" dir="${build.native}" failonerror="true">
+      <arg value="install" />
+    </exec>
+  </target>
+
+  <target name="compile" depends="java.compile,native.compile" />
+
+  <target name="link-and-package" depends="java.package,native.install" />
+
+  <target name="doc">
+    <javadoc sourcepath="${src}"
+             destdir="${doc}"
+             packagenames="${package}"
+             access="public">
+      <fileset dir="${src.java}">
+        <include name="**" />
+      </fileset>
+    </javadoc>
+    <!-- Work around CVE-2013-1571 (frame injection vulnerability in generated
+    docs.)  Hopefully, you're running a new enough JDK that this isn't
+    necessary, but one can never assume. -->
+    <patch-javadoc dir="${doc}" />
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+  <!-- Task to work around CVE-2013-1571.  See Ant #55132
+  <https://issues.apache.org/bugzilla/show_bug.cgi?id=55132>. -->
+  <macrodef name="patch-javadoc">
+    <attribute name="dir"/>
+    <attribute name="docencoding" default="${file.encoding}"/>
+    <sequential>
+      <replace encoding="@{docencoding}" summary="true" taskname="patch-javadoc">
+        <fileset dir="@{dir}" casesensitive="false" includes="**/index.html,**/index.htm,**/toc.html,**/toc.htm">
+          <not><contains text="function validURL(url) {" casesensitive="true" /></not>
+        </fileset>
+        <replacetoken><![CDATA[function loadFrames() {]]></replacetoken>
+        <replacevalue expandProperties="false"><![CDATA[if (targetPage != "" && !validURL(targetPage))
+    function validURL(url) { // FIXED FIXED FIXED
+        var pos = url.indexOf(".html");
+        if (pos == -1 || pos != url.length - 5)
+            return false;
+        var allowNumber = false;
+        var allowSep = false;
+        var seenDot = false;
+        for (var i = 0; i < url.length - 5; i++) {
+            var ch = url.charAt(i);
+            if ('a' <= ch && ch <= 'z' ||
+                    'A' <= ch && ch <= 'Z' ||
+                    ch == '$' ||
+                    ch == '_') {
+                allowNumber = true;
+                allowSep = true;
+            } else if ('0' <= ch && ch <= '9'
+                    || ch == '-') {
+                if (!allowNumber)
+                     return false;
+            } else if (ch == '/' || ch == '.') {
+                if (!allowSep)
+                    return false;
+                allowNumber = false;
+                allowSep = false;
+                if (ch == '.')
+                     seenDot = true;
+                if (ch == '/' && seenDot)
+                     return false;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    function loadFrames() {]]></replacevalue>
+      </replace>
+    </sequential>
+  </macrodef>
+
+</project>

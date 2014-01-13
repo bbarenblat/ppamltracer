@@ -1,0 +1,8 @@
+# .gitignore for ppamltracer-python                                 -*- conf -*-
+
+# Python
+*.pyc
+
+# distutils
+MANIFEST
+dist/

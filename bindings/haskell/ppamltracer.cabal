@@ -1,0 +1,62 @@
+-- ppamltracer.cabal -- Cabal build file for ppamltracer
+-- Copyright (C) 2014  Galois, Inc.
+--
+-- This program is free software: you can redistribute it and/or modify it under
+-- the terms of the GNU General Public License as published by the Free Software
+-- Foundation, either version 3 of the License, or (at your option) any later
+-- version.
+--
+-- This program is distributed in the hope that it will be useful, but WITHOUT
+-- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+-- FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+-- details.
+--
+-- You should have received a copy of the GNU General Public License along with
+-- this program.  If not, see <http://www.gnu.org/licenses/>.
+--
+-- To contact Galois, complete the Web form at <http://corp.galois.com/contact/>
+-- or write to Galois, Inc., 421 Southwest 6th Avenue, Suite 300, Portland,
+-- Oregon, 97204-1622.
+
+cabal-version:       >=1.10
+name:                ppamltracer
+version:             0.1.0
+synopsis:            A lightweight tracing library
+description: ppamltracer is a lightweight tracing library designed for explicit
+ instrumention of generated code. If you’re writing a compiler and need hard
+ data on your optimizer’s efficacy, ppamltracer is the library for you.  This
+ package uses Haskell’s foreign function interface to wrap the C libppamltracer
+ API.
+ .
+ ppamltracer writes trace logs in the
+ <http://tu-dresden.de/zih/otf/ Open Trace Format>, a free and open standard
+ developed by the Zentrum für Informationsdienste und Hochleistungsrechnen
+ (Center for Information Services and High-Performance Computing) at the
+ Technical University of Dresden.
+ .
+ We developed ppamltracer as part of DARPA’s
+ <http://darpa.mil/Our_Work/I2O/Programs/Probabilistic_Programming_for_Advanced_Machine_Learning_(PPAML%29.aspx Probabilistic Programming for Advancing Machine Learning>
+ (PPAML) project.
+copyright:           © 2014 Galois, Inc.
+license:             GPL-3
+author:              Benjamin Barenblat
+maintainer:          bbarenblat@galois.com
+category:            Language
+build-type:          Simple
+extra-source-files:  examples/simple.hs
+tested-with:         GHC==7.6.3
+
+library
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  other-extensions:    DeriveDataTypeable
+                     , EmptyDataDecls
+                     , ExistentialQuantification
+                     , TemplateHaskell
+  build-depends:       base
+                     , deepseq >=1.2.0.0 && <2
+                     , hierarchical-exceptions <2
+  extra-libraries:     ppamltracer
+  exposed-modules:     PPAML.Tracer
+  other-modules:       PPAML.Tracer.Exception
+  ghc-options:         -Wall -O2

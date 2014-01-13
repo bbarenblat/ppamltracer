@@ -1,0 +1,24 @@
+			      ppamltracer, v0.1.0
+
+ppamltracer is a lightweight tracing library designed for explicit instrmention
+of generated code.  If you're writing a compiler and need hard data on your
+optimizer's efficacy, ppamltracer is the library for you.
+
+ppamltracer writes trace logs in the Open Trace Format [1], a free and open
+standard developed by the Zentrum für Informationsdienste und
+Hochleistungsrechnen (Center for Information Services and High-Performance
+Computing) at the Technical University of Dresden.
+
+This package contains the C code required to build the libppamltracer shared
+library, as well as bindings for Haskell, Racket, Python, and Java.  While the
+bindings present idiomatic interfaces of various degrees of safety, they all
+rely on the shared library, so you'll need to install that first.  For detailed
+installation instructions, see the INSTALL file.
+
+For examples that use the C API, see the examples directory.  For examples that
+use the APIs presented by the various language bindings, see the READMEs
+associated with those bindings.
+
+
+[1] http://tu-dresden.de/die_tu_dresden/zentrale_einrichtungen/zih/forschung/projekte/otf
+[2] http://darpa.mil/Our_Work/I2O/Programs/Probabilistic_Programming_for_Advanced_Machine_Learning_(PPAML%29.aspx)

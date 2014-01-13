@@ -1,0 +1,8 @@
+			  ppamltracer-haskell, v0.1.0
+
+This package contains Haskell bindings to ppamltracer.  They require GHC 7.6 or
+later.
+
+This package uses the Cabal build system; normal Cabal build procedure applies.
+
+For examples of use, see the examples directory.

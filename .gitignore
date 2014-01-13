@@ -1,0 +1,56 @@
+# .gitignore for ppamltracer                                        -*- conf -*-
+
+# Editor backup files
+*~
+\#*
+.\#*
+
+# autoscan
+autoscan.log
+configure.scan
+
+# aclocal
+aclocal.m4
+autom4te.cache/
+m4/libtool.m4
+m4/lt*.m4
+
+# autoconf
+configure
+
+# autoheader
+config.h.in
+
+# libtoolize
+ltmain.sh
+
+# automake
+Makefile.in
+ar-lib
+config.guess
+config.sub
+depcomp
+install-sh
+missing
+
+# configure
+.deps/
+Makefile
+config.h
+config.log
+config.status
+libtool
+ppamltracer.pc
+stamp-*
+
+# make
+.libs/
+*.la
+*.lo
+*.o
+
+# Doxygen
+doc/
+
+# Examples
+examples/simple

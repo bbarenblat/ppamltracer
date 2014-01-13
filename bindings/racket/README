@@ -1,0 +1,11 @@
+			  ppamltracer-racket, v0.1.0
+
+This package contains Racket bindings to ppamltracer.  It requires Racket v5.2
+or later.
+
+Currently, this package is designed to be used as a collection; to install it,
+you should type `raco link --name ppamltracer .'.  (You may uninstall it with
+`raco link --remove ppamltracer'.)
+
+To build the documentation, which contains a detailed example of use, you
+should run `scribble ++xref-in setup/xref load-collections-xref manual.scrbl'.

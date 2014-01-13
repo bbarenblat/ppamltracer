@@ -1,0 +1,45 @@
+/* index.dox -- front-page documentation for ppamltracer               -*- c -*-
+ * Copyright (C) 2013  Galois, Inc.
+ *
+ * This library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * To contact Galois, complete the Web form at
+ * <http://corp.galois.com/contact/> or write to Galois, Inc., 421 Southwest
+ * 6th Avenue, Suite 300, Portland, Oregon, 97204-1622. */
+
+/**
+ * @mainpage Overview
+ *
+ * ppamltracer is a lightweight, portable tracing library designed for explicit
+ * instrumention of generated code.  If you're writing a compiler and need hard
+ * data on your optimizer's efficacy, ppamltracer is the library for you.
+ *
+ * @ref simple.c shows ppamltracer in action tracing two phases of computation
+ * (factorials and Fibonacci numbers), and honestly, it's probably all the API
+ * documentation you need.  You can also have a look at @ref ppaml_tracer_t and
+ * @ref ppaml_phase_t, the data structures which ppamltracer manipulates.
+ *
+ * ppamltracer writes trace logs in the [Open Trace Format]
+ * (http://tu-dresden.de/zih/otf/), a free and open standard developed by the
+ * Zentrum f&uuml;r Informationsdienste und Hochleistungsrechnen (Center for
+ * Information Services and High-Performance Computing) at the Technical
+ * University of Dresden.
+ *
+ * We developed ppamltracer as part of DARPA's [Probabilistic Programming for
+ * Advancing Machine Learning]
+ * (http://darpa.mil/Our_Work/I2O/Programs/Probabilistic_Programming_for_Advanced_Machine_Learning_(PPAML%29.aspx)
+ * (PPAML) project.
+ *
+ * @example simple.c
+ */

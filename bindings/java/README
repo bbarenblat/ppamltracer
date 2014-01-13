@@ -1,0 +1,12 @@
+			   ppamltracer-java, v0.1.0
+
+This package contains Java bindings to ppamltracer.  They require Java SE 5 or
+later.
+
+This package uses the Java Native Interface.  Therefore, building it produces
+two artifacts: a jar, which you should install in your CLASSPATH, and a shared
+library, which you should install in your LD_LIBRARY_PATH.  If you have both
+Ant and autotools installed, simply typing `ant' will build both artifacts and
+install them in the `dist' directory.
+
+For examples of use, see the examples directory.
