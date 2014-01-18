@@ -21,6 +21,7 @@
 # Fire up Autoconf.
 AC_PREREQ([2.69])
 AC_INIT([ppamltracer], [0.1.0], [bbarenblat@galois.com])
+AC_CANONICAL_TARGET
 
 # Fire up Automake.  Use ustar format because we actually have file names
 # longer than 99 characters (hooray, Java).
@@ -31,13 +32,19 @@ AC_CONFIG_MACRO_DIR([m4])
 # Build quietly.
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-# Build a C library.
+# Build C.
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 AC_PROG_CC_C99
 # Automake 1.12 seems to require this, but automake 1.11 doesn't recognize it.
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+
+# Build a library.  On Cygwin, libotf does not build DLLs, so make ppamltracer
+# also not build DLLs.
+if test "$target_os" = "cygwin"; then
+    AC_DISABLE_SHARED
+fi
 LT_INIT
 
 # Dependencies
