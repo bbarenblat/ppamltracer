@@ -1,4 +1,4 @@
-# Makefile.am -- automake script for ppamltracer
+# Makefile.am -- automake script for ppamltracer tests
 # Copyright (C) 2013  Galois, Inc.
 #
 # This program is free software: you can redistribute it and/or modify it under
@@ -18,33 +18,24 @@
 # or write to Galois, Inc., 421 Southwest 6th Avenue, Suite 300, Portland,
 # Oregon, 97204-1622.
 
-ACLOCAL_AMFLAGS = -I m4
-
-SUBDIRS = include src test
-EXTRA_DIST = Doxyfile bindings examples
-dist-hook:
-	$(RM) `find $(distdir) -type f -name .gitignore`
-
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = ppamltracer.pc
-
-include $(srcdir)/Makefile_doxygen.am
-if DX_COND_doc
-MOSTLYCLEANFILES = $(DX_CLEANFILES)
-
-all-local: doc
-
-doc: doxygen-doc
-
-install-data-local: install-doxygen-doc
-install-doxygen-doc: $(DX_DOCDIR)/$(DX_PROJECT).tag
-	$(INSTALL) -d $(docdir)
-	cp -a $(DX_DOCDIR)/* $(docdir)
-
-uninstall-local: uninstall-doxygen-doc
-uninstall-doxygen-doc:
-	$(RM) -r $(docdir)/{html,latex,man,$(DX_PROJECT).{ps,pdf},rtf,xml}
-	$(RM) $(docdir)/$(DX_PROJECT).tag
-
-.PHONY: doc install-doxygen-doc uninstall-doxygen-doc
-endif DX_COND_doc
+TESTS = check_ppamltracer
+check_PROGRAMS = check_ppamltracer
+check_ppamltracer_SOURCES = \
+	check_ppamltracer.c \
+	tmpdir.c \
+	tmpdir.h \
+	trace_invalid.c \
+	trace_invalid.h \
+	trace_valid.c \
+	trace_valid.h
+check_ppamltracer_CFLAGS = \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/src \
+	-std=c99 \
+	-Wall \
+	-Wextra \
+	-pedantic \
+	@check_CFLAGS@
+check_ppamltracer_LDADD = \
+	$(top_builddir)/src/libppamltracer.la \
+	@check_LIBS@

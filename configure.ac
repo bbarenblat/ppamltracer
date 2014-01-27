@@ -60,11 +60,33 @@ DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 DX_INIT_DOXYGEN([ppamltracer], [Doxyfile], [doc])
 
+# Tests
+AC_CHECK_HEADERS([ftw.h unistd.h sys/stat.h time.h])
+AC_CHECK_TYPES(
+	[struct FTW],
+	[],
+	[],
+	[[#define _XOPEN_SOURCE 500
+#include <ftw.h>]])
+AC_CHECK_TYPES(
+	[struct timespec],
+	[],
+	[],
+	[[#define _POSIX_C_SOURCE 199309L
+#include <time.h>]])
+AC_CHECK_FUNCS([mkdtemp nanosleep nftw])
+PKG_CHECK_MODULES([check], [check >= 0.9.4],
+	[],
+	[AC_MSG_WARN([check not found; `make check' will fail])])
+AC_SUBST([check_CFLAGS])
+AC_SUBST([check_LIBS])
+
 # Generate Makefiles and pkg-config file.
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
-	include/Makefile])
+	include/Makefile
+	test/Makefile])
 AC_CONFIG_FILES([ppamltracer.pc])
 
 # All done.
