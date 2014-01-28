@@ -22,7 +22,7 @@
 #	include <config.h>
 #endif
 
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200112L
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -54,6 +54,49 @@
 		strcpy(index_file, trace_invalid_path());
 		strcat(index_file, ".otf");
 		ck_assert(access(index_file, F_OK) == 0);
+	}
+	END_TEST
+#endif
+
+#if (HAVE_FIXTURE_tmpdir && HAVE_UNISTD_H && HAVE_SETENV)
+#	define HAVE_TEST_init_from_env
+	START_TEST(test_init_from_env)
+	{
+		// Figure out where to put the trace.
+		char trace_base[128];
+		strcpy(trace_base, tmpdir_name());
+		strcat(trace_base, "/trace");
+		// Tell ppamltracer where.
+		ck_assert(
+			setenv("PPAMLTRACER_TRACE_BASE", trace_base, 1) == 0);
+		// Create the trace.
+		ppaml_tracer_t tracer;
+		ck_assert(
+			ppaml_tracer_init_from_env(&tracer) == 0);
+		ck_assert(ppaml_tracer_done(&tracer) == 0);
+		// Make sure it's in the right place.
+		strcat(trace_base, ".otf");
+		ck_assert(access(trace_base, F_OK) == 0);
+	}
+	END_TEST
+
+#	define HAVE_TEST_init_from_env_fails_on_empty
+	START_TEST(test_init_from_env_fails_on_empty)
+	{
+		ck_assert(setenv("PPAMLTRACER_TRACE_BASE", "", 1) == 0);
+		ppaml_tracer_t tracer;
+		ck_assert(ppaml_tracer_init_from_env(&tracer) == 5);
+	}
+	END_TEST
+#endif
+
+#if (HAVE_FIXTURE_tmpdir && HAVE_UNISTD_H && HAVE_UNSETENV)
+#	define HAVE_TEST_init_from_env_fails_on_unset
+	START_TEST(test_init_from_env_fails_on_unset)
+	{
+		ck_assert(unsetenv("PPAMLTRACER_TRACE_BASE") == 0);
+		ppaml_tracer_t tracer;
+		ck_assert(ppaml_tracer_init_from_env(&tracer) == 5);
 	}
 	END_TEST
 #endif
@@ -196,6 +239,19 @@ Suite *ppamltracer_suite()
 	trace_invalid_add_checked(tc);
 #	ifdef HAVE_TEST_init_creates_trace
 		tcase_add_test(tc, test_init_creates_trace);
+#	endif
+	suite_add_tcase(s, tc);
+	// Test case: init from env
+	tc = tcase_create("init_from_env");
+	tmpdir_add_checked(tc);
+#	ifdef HAVE_TEST_init_from_env
+		tcase_add_test(tc, test_init_from_env);
+#	endif
+#	ifdef HAVE_TEST_init_from_env_fails_on_unset
+		tcase_add_test(tc, test_init_from_env_fails_on_unset);
+#	endif
+#	ifdef HAVE_TEST_init_from_env_fails_on_empty
+		tcase_add_test(tc, test_init_from_env_fails_on_empty);
 #	endif
 	suite_add_tcase(s, tc);
 	// Test case: valid

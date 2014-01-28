@@ -65,6 +65,31 @@
 int ppaml_tracer_init(ppaml_tracer_t *tracer, const char report_name_base[]);
 
 /**
+ * Initializes a ppaml_tracer_t, taking settings from environment variables.
+ *
+ * @relates ppaml_tracer_t
+ *
+ * The trace report will be stored in Open Trace Format; all trace file paths
+ * will begin with the value in the environment variable @c
+ * PPAMLTRACER_TRACE_BASE.
+ *
+ * @param[out] tracer pointer to the tracer to be initialized
+ *
+ * @pre @p tracer is nonnull.
+ * @pre @p *tracer is uninitialized.
+ *
+ * @return 0 upon success
+ * @return 1 if the Open Trace Format file manager could not be initialized
+ * @return 2 if the Open Trace Format writer could not be initialized
+ * @return 3 if setting the trace resolution failed
+ * @return 4 if defining the main OTF process failed
+ * @return 5 if @c PPAMLTRACER_TRACE_BASE is unset or empty
+ *
+ * @post If the function return successfully, @p *tracer is initialized.
+ */
+int ppaml_tracer_init_from_env(ppaml_tracer_t *tracer);
+
+/**
  * Finalizes a ppaml_tracer_t.
  *
  * @relates ppaml_tracer_t

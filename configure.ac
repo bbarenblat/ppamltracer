@@ -74,7 +74,7 @@ AC_CHECK_TYPES(
 	[],
 	[[#define _POSIX_C_SOURCE 199309L
 #include <time.h>]])
-AC_CHECK_FUNCS([mkdtemp nanosleep nftw])
+AC_CHECK_FUNCS([mkdtemp nanosleep nftw setenv unsetenv])
 PKG_CHECK_MODULES([check], [check >= 0.9.4],
 	[],
 	[AC_MSG_WARN([check not found; `make check' will fail])])

@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <otf.h>
 
@@ -56,6 +57,23 @@ int ppaml_tracer_init(
 	require_one(
 		OTF_Writer_writeDefProcess(tracer->writer, 0, 1, "main", 0),
 		4);
+done:	return r;
+}
+
+int ppaml_tracer_init_from_env(ppaml_tracer_t *const tracer)
+{
+	int r = 0;
+	// Figure out where to put the trace.
+	const char *const report_name_base = getenv("PPAMLTRACER_TRACE_BASE");
+	require_nonnull(report_name_base, 5);
+	if (report_name_base[0] == '\0') {
+		/* The variable exists, but it's empty, so we can't do anything
+		 * with it. */
+		r = 5;
+		goto done;
+	}
+	// Create the trace.
+	r = ppaml_tracer_init(tracer, report_name_base);
 done:	return r;
 }
 
