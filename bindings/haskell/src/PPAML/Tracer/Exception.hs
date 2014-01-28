@@ -35,7 +35,7 @@ mkAbstractException 'SomeException "TracerException"
 'TracerException'. -}
 mkAbstractException 'TracerException "OTFException"
 
--- | An error caused by the Open Trace Fromat manager.  Extends 'OTFException'.
+-- | An error caused by the Open Trace Format manager.  Extends 'OTFException'.
 mkAbstractException 'OTFException "OTFManagerException"
 
 {-| Failure to initialize the Open Trace Format manager.  Extends
