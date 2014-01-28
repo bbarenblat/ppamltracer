@@ -5,6 +5,7 @@ includedir=@includedir@
 
 Name: ppamltracer
 Version: @PACKAGE_VERSION@
+Description: A lightweight, portable tracing library
 Cflags: -I${includedir}
 Libs: -L${libdir} -lppamltracer
 Libs.private: @OTF_LIBS@
