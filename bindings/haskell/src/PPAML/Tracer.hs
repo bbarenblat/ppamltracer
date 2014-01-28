@@ -47,7 +47,7 @@ be finite. -}
 module PPAML.Tracer
        ( -- * Tracers
          Tracer, TracerHandle
-       , withTracer
+       , withTracer, withTracer'
          -- * Phases
        , Phase, PhaseHandle
        , withPhase
@@ -83,6 +83,7 @@ module PPAML.Tracer
          OTFPhaseDefinitionFailure, OTFPhaseEntryFailure, OTFPhaseExitFailure,
          OTFWriterCloseFailure, OTFTraceResolutionFailure,
          OTFProcessDefinitionFailure
+       , TraceBaseUndefined
          -- ** Timing exceptions
        , TimingException, ClockAcquisitionFailure
        ) where
@@ -121,6 +122,36 @@ withTracer :: FilePath -> (TracerHandle -> IO a) -> IO a
 withTracer reportBaseName f =
   allocaBytes tracerSize $ \tracerHandle ->
     bracket_ (tracerInit tracerHandle reportBaseName)
+             (tracerDone tracerHandle)
+             (f tracerHandle)
+
+{-| Similar to 'withTracer'.  Constructs a 'Tracer' and executes the specified
+computation.  The trace report will be stored in Open Trace Format; all trace
+file paths will begin with the path contained in the environment variable
+'PPAMLTRACER_TRACE_BASE'.
+
+Throws:
+
+  * 'OTFManagerInitializationFailure' if the Open Trace Format manager could not
+    be initialized.
+
+  * 'OTFWriterInitializationFailure' if the Open Trace Format writer could not
+    be initialized.
+
+  * 'OTFTraceResolutionFailure' if setting the trace resolution failed.
+
+  * 'OTFProcessDefinitionFailure' if defining the main OTF process failed.
+
+  * 'OTFWriterCloseFailure' if the Open Trace Format writer could not be closed
+    after the computation ran.
+
+  * 'TraceBaseUndefined' if the 'PPAMLTRACER_TRACE_BASE' environment variable is
+    undefined or empty. -}
+
+withTracer' :: (TracerHandle -> IO a) -> IO a
+withTracer' f =
+  allocaBytes tracerSize $ \tracerHandle ->
+    bracket_ (tracerInitFromEnv tracerHandle)
              (tracerDone tracerHandle)
              (f tracerHandle)
 
@@ -185,6 +216,20 @@ tracerInit tracer reportNameBase =
       3 -> throw OTFTraceResolutionFailure
       4 -> throw OTFProcessDefinitionFailure
       r -> unexpectedReturnCode r
+
+foreign import ccall unsafe "ppaml/tracer.h ppaml_tracer_init_from_env"
+  ppaml_tracer_init_from_env :: TracerHandle -> IO CInt
+
+tracerInitFromEnv :: TracerHandle -> IO ()
+tracerInitFromEnv tracer =
+  ppaml_tracer_init_from_env tracer >>= \case
+    0 -> return ()
+    1 -> throw OTFManagerInitializationFailure
+    2 -> throw OTFWriterInitializationFailure
+    3 -> throw OTFTraceResolutionFailure
+    4 -> throw OTFProcessDefinitionFailure
+    5 -> throw TraceBaseUndefined
+    r -> unexpectedReturnCode r
 
 foreign import ccall unsafe "ppaml/tracer.h ppaml_tracer_done"
   ppaml_tracer_done :: TracerHandle -> IO CInt

@@ -68,6 +68,10 @@ mkException 'OTFWriterException "OTFTraceResolutionFailure"
 -- | Failure to define a process (i.e., a thread).  Extends 'OTFWriterException'.
 mkException 'OTFWriterException "OTFProcessDefinitionFailure"
 
+{-| Thrown by 'withTracer'' when it is called and 'PPAMLTRACER_TRACE_BASE' is
+unset or empty. -}
+mkException 'TracerException "TraceBaseUndefined"
+
 
 ------------------------------ Timing exceptions -------------------------------
 
