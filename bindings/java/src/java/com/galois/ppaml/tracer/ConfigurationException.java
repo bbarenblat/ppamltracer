@@ -1,4 +1,4 @@
-/* Tracer -- Java analogue to ppaml_tracer_t
+/* ConfigurationException -- signals a configuration failure
  * Copyright (C) 2014  Galois, Inc.
  *
  * This library is free software: you can redistribute it and/or modify it
@@ -21,25 +21,14 @@
 package com.galois.ppaml.tracer;
 
 /**
- * State bundle for ppamltracer.
- *
- * <p> ppamltracer is fundamentally a set of stateful operations; an object
- * implementing <code>Tracer</code> holds the state ppamltracer needs to operate
- * properly.
+ * Signals a failure related to tracer configuration.
  */
-public interface Tracer {
+public class ConfigurationException extends java.lang.RuntimeException {
 
-    /**
-     * Creates and initializes a {@link Phase} associated with this
-     * <code>Tracer</code>.
-     *
-     * @param name the name of the phase.
-     */
-    public Phase createPhase(final String name);
+    static final long serialVersionUID = 3219379892261890429L;
 
-    /**
-     * Finalizes and frees the underlying structure.
-     */
-    public void close();
+    protected ConfigurationException(String s) {
+        super(s);
+    }
 
 }

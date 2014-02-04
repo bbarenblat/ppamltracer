@@ -24,8 +24,8 @@ lib_LTLIBRARIES = libppamltracer_java.la
 libppamltracer_java_la_SOURCES = \
 	$(srcdir)/com_galois_ppaml_tracer_Phase.c \
 	$(srcdir)/com_galois_ppaml_tracer_Phase.h \
-	$(srcdir)/com_galois_ppaml_tracer_Tracer.c \
-	$(srcdir)/com_galois_ppaml_tracer_Tracer.h \
+	$(srcdir)/com_galois_ppaml_tracer_TracerCWrapper.c \
+	$(srcdir)/com_galois_ppaml_tracer_TracerCWrapper.h \
 	$(srcdir)/pointer.h
 libppamltracer_java_la_CFLAGS = \
 	-std=c99 \

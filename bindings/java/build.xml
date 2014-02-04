@@ -55,7 +55,7 @@ Oregon, 97204-1622. -->
       <fileset dir="${src.c}" />
     </copy>
     <javah classpath="${build.classes}"
-           class="${package}.Tracer,${package}.Phase"
+           class="${package}.TracerCWrapper,${package}.Phase"
            destdir="${build.native}"
            verbose="yes" />
   </target>

@@ -27,9 +27,9 @@ package com.galois.ppaml.tracer;
 public final class Phase extends CWrapper {
 
     /**
-     * The <code>Tracer</code> this phase is associated with.
+     * The <code>TracerCWrapper</code> this phase is associated with.
      */
-    private final Tracer tracer;
+    private final TracerCWrapper tracer;
 
     /**
      * The name of the phase.
@@ -38,14 +38,14 @@ public final class Phase extends CWrapper {
 
     /**
      * Creates and initializes a <code>Phase</code>.  You should not call this;
-     * call {@link Tracer.createPhase} instead.
+     * call <code>Tracer.createPhase</code> instead.
      *
-     * @param tracer the {@link Tracer} to associate the <code>Phase</code>
-     * with.
+     * @param tracer the {@link TracerCWrapper} to associate the
+     * <code>Phase</code> with.
      *
      * @param name the name of the phase.
      */
-    protected Phase(Tracer tracer, final String name) {
+    protected Phase(TracerCWrapper tracer, final String name) {
         this.tracer = tracer;
         this.name = name;
         super.open();

@@ -3,6 +3,7 @@
 
 package com.galois.ppaml.tracer.examples;
 
+import com.galois.ppaml.tracer.ExplicitlyConfiguredTracer;
 import com.galois.ppaml.tracer.Phase;
 import com.galois.ppaml.tracer.Tracer;
 
@@ -72,7 +73,7 @@ public class Simple {
 
 	public static void main(String[] args) {
 		// Start ppamltracer.
-		Tracer tracer = new Tracer("/tmp/simple_report");
+		Tracer tracer = new ExplicitlyConfiguredTracer("/tmp/simple_report");
 
 		// Run the app.
 		(new Simple()).go(tracer);

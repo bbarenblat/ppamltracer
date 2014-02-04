@@ -1,4 +1,5 @@
-/* com_galois_ppaml_tracer_Tracer.c -- JNI wrapper for com.galois.ppaml.tracer.Tracer
+/* com_galois_ppaml_tracer_TracerCWrapper.c -- JNI wrapper for
+ *     com.galois.ppaml.tracer.TracerCWrapper
  * Copyright (C) 2014  Galois, Inc.
  *
  * This library is free software: you can redistribute it and/or modify it
@@ -23,12 +24,12 @@
 #include <ppaml/tracer.h>
 
 #include <jni.h>
-#include <com_galois_ppaml_tracer_Tracer.h>
+#include <com_galois_ppaml_tracer_TracerCWrapper.h>
 
 #include "pointer.h"
 
 JNIEXPORT
-jlong JNICALL Java_com_galois_ppaml_tracer_Tracer_mallocTracer(
+jlong JNICALL Java_com_galois_ppaml_tracer_TracerCWrapper_mallocTracer(
 	JNIEnv *const env,
 	jclass Tracer)
 {
@@ -36,7 +37,7 @@ jlong JNICALL Java_com_galois_ppaml_tracer_Tracer_mallocTracer(
 }
 
 JNIEXPORT
-jint JNICALL Java_com_galois_ppaml_tracer_Tracer_ppaml_1tracer_1init(
+jint JNICALL Java_com_galois_ppaml_tracer_TracerCWrapper_ppaml_1tracer_1init(
 	JNIEnv *const env,
 	jclass Tracer,
 	jlong tracer,
@@ -58,7 +59,16 @@ done:	(*env)->ReleaseStringUTFChars(env, reportNameBase, cReportNameBase);
 }
 
 JNIEXPORT
-jint JNICALL Java_com_galois_ppaml_tracer_Tracer_ppaml_1tracer_1done(
+jint JNICALL Java_com_galois_ppaml_tracer_TracerCWrapper_ppaml_1tracer_1init_1from_1env(
+	JNIEnv *const env,
+	jclass Tracer,
+	jlong tracer)
+{
+	return ppaml_tracer_init_from_env(pointer_of_jlong(tracer));
+}
+
+JNIEXPORT
+jint JNICALL Java_com_galois_ppaml_tracer_TracerCWrapper_ppaml_1tracer_1done(
 	JNIEnv *const env,
 	jclass Tracer,
 	jlong tracer)
@@ -67,7 +77,7 @@ jint JNICALL Java_com_galois_ppaml_tracer_Tracer_ppaml_1tracer_1done(
 }
 
 JNIEXPORT
-void JNICALL Java_com_galois_ppaml_tracer_Tracer_freeTracer(
+void JNICALL Java_com_galois_ppaml_tracer_TracerCWrapper_freeTracer(
 	JNIEnv *const env,
 	jclass Tracer,
 	jlong tracer)

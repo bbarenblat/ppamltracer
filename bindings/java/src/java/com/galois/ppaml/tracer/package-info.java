@@ -30,7 +30,7 @@
  *
  * <pre>
  *   // Create report.
- *   Tracer tracer = new Tracer("/tmp/my_report");
+ *   Tracer tracer = new ExplicitlyConfiguredTracer("/tmp/my_report");
  *
  *   // Register phase 1 and do stuff.
  *   Phase phase = tracer.createPhase("phase 1");
