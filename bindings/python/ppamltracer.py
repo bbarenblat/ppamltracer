@@ -1,5 +1,5 @@
 # ppamltracer -- Python bindings to ppamltracer
-# Copyright (C) 2013  Galois, Inc.
+# Copyright (C) 2013, 2014  Galois, Inc.
 #
 # This library is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -85,7 +85,13 @@ _sizeof_ppaml_tracer_t = \
 _sizeof_ppaml_phase_t = ctypes.c_size_t.in_dll(_lib, "ppaml_phase_t_size").value
 
 def _ppaml_tracer_init(tracer, report_name_base):
-    result = _lib.ppaml_tracer_init(tracer, report_name_base)
+    if report_name_base is None:
+        _initialize = _lib.ppaml_tracer_init_from_env
+        _initialize_args = [tracer]
+    else:
+        _initialize = _lib.ppaml_tracer_init
+        _initialize_args = [tracer, report_name_base]
+    result = _initialize(*_initialize_args)
     if result == 0:
         return None
     elif result == 1:
@@ -96,6 +102,8 @@ def _ppaml_tracer_init(tracer, report_name_base):
         raise OTFWriterResolutionError()
     elif result == 4:
         raise OTFWriterProcessDefinitionError("main")
+    elif result == 5:
+        raise UndefinedTracerBasePathError()
     else:
         _warn_unexpected_return_code()
         raise TracerError()
@@ -165,12 +173,13 @@ class Tracer(object):
 
     """
 
-    def __init__(self, report_name_base):
+    def __init__(self, report_name_base=None):
         """Create a new tracer.
 
         The tracer will create an Open Trace Format report during program
-        execution.  The multiple files of the report will all start with the
-        specified base name.
+        execution.  If report_name_base is specified, the multiple files of the
+        report will all start with report_name_base; otherwise, they will start
+        with the contents of the PPAMLTRACER_TRACE_BASE environment variable.
 
         """
         self._report_name_base = report_name_base
@@ -272,6 +281,19 @@ class _PhaseTimerManager(object):
 class TracerError(Exception):
     """A generic ppamltracer error."""
     pass
+
+class ConfigurationError(TracerError):
+    """An error related to tracer configuration."""
+    pass
+
+class UndefinedTracerBasePathError(ConfigurationError):
+    """Signals an attempt to initialize a tracer with an undefined basepath.
+
+    """
+
+    def __init__(self):
+        super(UndefinedTracerBasePathError, self).__init__(
+            "attempted to configure tracer with undefined base path")
 
 class OTFError(TracerError):
     """An error related to Open Trace Format input and output."""
