@@ -307,8 +307,7 @@ class OTFManagerInitializationError(OTFManagerError):
     """Failure to initialize the Open Trace Format manager."""
 
     def __init__(self):
-        super.__init__(
-            self,
+        super(OTFManagerInitializationError, self).__init__(
             "could not initialize Open Trace Format file manager")
 
 class OTFWriterError(OTFError):
@@ -319,49 +318,55 @@ class OTFWriterInitializationError(OTFWriterError):
     """Failure to initialize the Open Trace Format writer."""
 
     def __init__(self):
-        super.__init__(self, "could not open Open Trace Format writer")
+        super(OTFWriterInitializationError, self).__init__(
+            "could not open Open Trace Format writer")
 
 class OTFWriterPhaseDefinitionError(OTFWriterError):
     """Failure to define a phase. """
 
     def __init__(self):
-        super.__init__(self, "could not define phase")
+        super(OTFWriterPhaseDefinitionError, self).__init__(
+            "could not define phase")
 
 class OTFWriterEntryError(OTFWriterError):
     """Failure to record entry into a phase."""
 
     def __init__(self):
-        super.__init__(self, "could not record phase start")
+        super(OTFWriterEntryError, self).__init__(
+            "could not record phase start")
 
 class OTFWriterExitError(OTFWriterError):
     """Failure to record exit from a phase."""
 
     def __init__(self):
-        super.__init__(self, "could not record phase end")
+        super(OTFWriterExitError, self).__init__("could not record phase end")
 
 class OTFWriterCloseError(OTFWriterError):
     """Failure to close the Open Trace Format writer."""
 
     def __init__(self):
-        super.__init__(self, "could not close Open Trace Format writer")
+        super(OTFWriterCloseError, self).__init__(
+            "could not close Open Trace Format writer")
 
 class OTFWriterResolutionError(OTFWriterError):
     """Failure to set the tracer resolution."""
 
     def __init__(self):
-        super.__init__(self, "could not set trace resolution")
+        super(OTFWriterResolutionError, self).__init__(
+            "could not set trace resolution")
 
 class OTFWriterProcessDefinitionError(OTFWriterError):
     """Failure to define an Open Trace Format process."""
 
     def __init__(self, process_name=None):
         if process_name is None:
-            super.__init__(self, "could not define Open Trace Format process")
+            super(OTFWriterProcessDefinitionError, self).__init__(
+                "could not define Open Trace Format process")
         else:
-            super.__init__(self,
-                           ("could not define Open Trace Format process \""
-                            + process_name
-                            + "\""))
+            super(OTFWriterProcessDefinitionError, self).__init__(
+                "could not define Open Trace Format process \""
+                + process_name
+                + "\"")
 
 class TimingError(TracerError):
     """An error related to system timers."""
@@ -371,7 +376,8 @@ class ClockAcquisitionError(TimingError):
     """A failure to get the current clock time."""
 
     def __init__(self):
-        super.__init__(self, "could not get current time")
+        super(ClockAcquisitionError, self).__init__(
+            "could not get current time")
 
 
 ############################### Warnings ###############################
