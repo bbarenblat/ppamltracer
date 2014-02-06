@@ -87,6 +87,7 @@ manipulate the structs as tagged pointers. |#
 
 ;; Import library functions.
 (define-ppamltracer ppaml_tracer_init (_fun _tracer _path ~> _int))
+(define-ppamltracer ppaml_tracer_init_from_env (_fun _tracer ~> _int))
 (define-ppamltracer ppaml_tracer_done (_fun _tracer ~> _int))
 (define-ppamltracer ppaml_phase_init (_fun _tracer _phase _string ~> _int))
 (define-ppamltracer ppaml_phase_done (_fun _phase ~> _int))
@@ -179,6 +180,11 @@ constructor at all. |#
 
 (define-exception exn:fail:ppamltracer)
 
+(define-exception exn:fail:ppamltracer:configuration)
+
+(define-exception exn:fail:ppamltracer:configuration:undefined-tracer-base-path
+  "attempted to configure tracer with undefined base path")
+
 (define-exception exn:fail:ppamltracer:otf)
 
 (define-exception exn:fail:ppamltracer:otf:manager)
@@ -258,15 +264,22 @@ This is a bug in ppamltracer!  Report it to the maintainers."
 (define ((as-void proc) . args)
   (void (apply proc args)))
 
-(define ppaml-tracer-init
-  (as-void
-   (checked ppaml_tracer_init
-            [0 'ok]
-            [1 (fail make-exn:fail:ppamltracer:otf:manager:initialization)]
-            [2 (fail make-exn:fail:ppamltracer:otf:writer:initialization)]
-            [3 (fail make-exn:fail:ppamltracer:otf:writer:resolution)]
-            [4 (fail make-exn:fail:ppamltracer:otf:writer:process-definition
-                     "main")])))
+(define (ppaml-tracer-init tracer [path 'from-environment])
+  (let-values ([(c-initialize c-initialize-args)
+                (if (equal? path 'from-environment)
+                    (values ppaml_tracer_init_from_env (list tracer))
+                    (values ppaml_tracer_init (list tracer path)))])
+    (apply
+     (as-void
+      (checked
+       c-initialize
+       [0 'ok]
+       [1 (fail make-exn:fail:ppamltracer:otf:manager:initialization)]
+       [2 (fail make-exn:fail:ppamltracer:otf:writer:initialization)]
+       [3 (fail make-exn:fail:ppamltracer:otf:writer:resolution)]
+       [4 (fail make-exn:fail:ppamltracer:otf:writer:process-definition "main")]
+       [5 (fail make-exn:fail:ppamltracer:configuration:undefined-tracer-base-path)]))
+     c-initialize-args)))
 
 (define ppaml-tracer-done
   (as-void
@@ -344,12 +357,18 @@ evaluates to
     (finalize resource)
     result))
 
-(define (call-with-tracer report-name-base proc)
+(define (call-with-tracer-explicitly report-name-base proc)
   (managed-execution (malloc-_tracer)
                      ppaml-tracer-init
                      (list report-name-base)
                      proc
                      ppaml-tracer-done))
+
+(define call-with-tracer
+  (case-lambda
+    [(proc) (call-with-tracer-explicitly 'from-environment proc)]
+    [(report-name-base proc)
+     (call-with-tracer-explicitly report-name-base proc)]))
 
 (define (call-with-phase tracer phase-name proc)
   (managed-execution (malloc-_phase)
@@ -370,8 +389,12 @@ evaluates to
 
 ;;;;; Macro versions ;;;;;
 
-(define-syntax-rule (let/tracer [tracer report-name-base] body ...)
-  (call-with-tracer report-name-base (lambda (tracer) body ...)))
+(define-syntax let/tracer
+  (syntax-rules ()
+    [(_ [tracer] body ...)
+     (call-with-tracer (lambda (tracer) body ...))]
+    [(_ [tracer report-name-base] body ...)
+     (call-with-tracer report-name-base (lambda (tracer) body ...))]))
 
 (define-syntax-rule (let/phase tracer [phase phase-name] body ...)
   (call-with-phase tracer phase-name (lambda (phase) body ...)))
@@ -385,8 +408,11 @@ evaluates to
 (provide
  (contract-out [tracer? (-> any/c boolean?)]
                [phase? (-> any/c boolean?)]
+               ;; TODO: update
                [call-with-tracer (parametric->/c [A]
-                                   (-> path-string? (-> tracer? A) A))]
+                                   (case->
+                                    (-> (-> tracer? A) A)
+                                    (-> path-string? (-> tracer? A) A)))]
                [call-with-phase (parametric->/c [A]
                                   (-> tracer? string? (-> phase? A) A))]
                [call-with-phase-running (parametric->/c [A]

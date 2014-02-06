@@ -110,21 +110,29 @@ ppamltracer is fundamentally a set of stateful operations; the @racket[tracer] d
   Evaluates to @racket[#t] if and only if @racket[obj] is a @racket[tracer].
 }
 
-@defproc[(call-with-tracer [report-name-base path-string?]
-                           [proc (-> tracer? A)])
-         A]{
+@defproc*[([(call-with-tracer [proc (-> tracer? A)])
+            A]
+           [(call-with-tracer [report-name-base path-string?]
+                              [proc (-> tracer? A)])
+            A])]{
   Creates a new @racket[tracer].
-  The @racket[tracer] will save trace reports in Open Trace Format; all trace file paths will begin with @racket[report-name-base].
+  The @racket[tracer] will save trace reports in Open Trace Format.
+  Should @racket[report-name-base] be specified, all trace file paths will begin with @racket[report-name-base]; otherwise, all trace file paths will begin with the contents of the environment variable @envvar{PPAMLTRACER_TRACE_BASE}.
+
+  Invoking @racket[call-with-tracer] without specifying @racket[report-name-base] is an error if @envvar{PPAMLTRACER_TRACE_BASE} is undefined.
+  Doing so will cause Racket to throw (a sub-exception of) @racket[exn:fail:ppamltracer:configuration].
 }
 
-@defform[#:id let/tracer
-         #:literals (tracer)
-         (let/tracer [tracer report-name-base] body ...)
-         #:contracts ([report-name-base path-string?])]{
+@defform*[#:id let/tracer
+          #:literals (tracer)
+          [(let/tracer [tracer] body ...)
+           (let/tracer [tracer report-name-base] body ...)]
+          #:contracts ([report-name-base path-string?])]{
   Macro version of @racket[call-with-tracer].
-  Equivalent to
+  Equivalent to one of
 
   @racketblock[
+  (call-with-tracer (lambda (tracer) body ...))
   (call-with-tracer report-name-base (lambda (tracer) body ...))
   ]
 }
