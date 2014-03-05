@@ -1,8 +1,8 @@
 			      ppamltracer, v0.1.0
 
-ppamltracer is a lightweight tracing library designed for explicit instrumentation
-of generated code.  If you're writing a compiler and need hard data on your
-optimizer's efficacy, ppamltracer is the library for you.
+ppamltracer is a lightweight tracing library designed for explicit
+instrumentation of generated code.  If you're writing a compiler and need hard
+data on your optimizer's efficacy, ppamltracer is the library for you.
 
 ppamltracer writes trace logs in the Open Trace Format [1], a free and open
 standard developed by the Zentrum für Informationsdienste und
@@ -18,6 +18,13 @@ installation instructions, see the INSTALL file.
 For examples that use the C API, see the examples directory.  For examples that
 use the APIs presented by the various language bindings, see the READMEs
 associated with those bindings.
+
+*******************************************************************************
+*                          ATTENTION WINDOWS USERS:                           *
+*                                                                             *
+* ppamltracer cannot build shared libraries on Cygwin.  If you are building   *
+* on Cygwin, please pass the --disable-shared option to 'configure'.          *
+*******************************************************************************
 
 
 [1] http://tu-dresden.de/die_tu_dresden/zentrale_einrichtungen/zih/forschung/projekte/otf

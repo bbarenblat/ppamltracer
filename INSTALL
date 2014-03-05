@@ -53,7 +53,9 @@ The simplest way to compile this package is:
      <http://tu-dresden.de/die_tu_dresden/zentrale_einrichtungen/zih/forschung/projekte/otf>.
 
   2. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.
+     `./configure' to configure the package for your system.  If you're
+     building for Cygwin, you should pass `--disable-shared' to `configure';
+     ppamltracer will not build as a shared library for Cygwin.
 
      Running `configure' might take a while.  While running, it prints some
      messages telling which features it is checking for.
@@ -78,6 +80,17 @@ The simplest way to compile this package is:
   7. This package provides `make distcheck', which can by used by developers to
      test that all other targets like `make install' and `make uninstall' work
      correctly.  This target is generally not run by end users.
+
+Platform Specific Compilation Notes
+===================================
+
+As mentioned above, ppamltracer will not build as a shared library for Cygwin.
+To build ppamltracer for Cygwin, you'll need to run `configure' with the
+`--disable-shared' option:
+
+     ./configure --disable-shared
+
+This is a known issue.
 
 Compilers and Options
 =====================
