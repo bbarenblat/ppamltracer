@@ -1,4 +1,4 @@
-			      ppamltracer, v0.1.0
+			      ppamltracer, v0.2.0
 
 ppamltracer is a lightweight tracing library designed for explicit
 instrumentation of generated code.  If you're writing a compiler and need hard

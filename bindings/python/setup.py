@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # setup.py -- distutils setup script for ppamltracer-python
-# Copyright (C) 2013  Galois, Inc.
+# Copyright (C) 2013, 2014  Galois, Inc.
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -22,7 +22,7 @@
 from distutils.core import setup
 
 setup(name="ppamltracer-python",
-      version="0.1.0",
+      version="0.2.0",
       description="ppamltracer Python bindings",
       author="Benjamin Barenblat",
       author_email="bbarenblat@galois.com",

@@ -22,7 +22,7 @@ Oregon, 97204-1622. -->
 <project name="ppamltracer-java" basedir="." default="link-and-package">
 
   <property name="project.shortname" value="ppamltracer" />
-  <property name="project.version" value="0.1.0" />
+  <property name="project.version" value="0.2.0" />
   <property name="package" value="com.galois.ppaml.tracer" />
 
   <property name="src" location="src" />

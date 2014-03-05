@@ -20,7 +20,7 @@
 
 # Fire up Autoconf.
 AC_PREREQ([2.69])
-AC_INIT([ppamltracer], [0.1.0], [bbarenblat@galois.com])
+AC_INIT([ppamltracer], [0.2.0], [bbarenblat@galois.com])
 
 # Fire up Automake.  Use ustar format because we actually have file names
 # longer than 99 characters (hooray, Java).

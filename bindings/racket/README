@@ -1,4 +1,4 @@
-			  ppamltracer-racket, v0.1.0
+			  ppamltracer-racket, v0.2.0
 
 This package contains Racket bindings to ppamltracer.  It requires Racket v5.2
 or later.

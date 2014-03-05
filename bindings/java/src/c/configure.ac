@@ -20,7 +20,7 @@
 
 # Fire up Autoconf.
 AC_PREREQ([2.69])
-AC_INIT([ppamltracer-java], [0.1.0], [bbarenblat@galois.com])
+AC_INIT([ppamltracer-java], [0.2.0], [bbarenblat@galois.com])
 
 # Fire up Automake.
 AM_INIT_AUTOMAKE([-Wall -Wno-gnu -Werror foreign no-dist-gzip dist-bzip2])
