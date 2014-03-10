@@ -1,4 +1,4 @@
-			  ppamltracer-haskell, v0.2.0
+			  ppamltracer-haskell, v0.2.1
 
 This package contains Haskell bindings to ppamltracer.  They require GHC 7.6 or
 later.

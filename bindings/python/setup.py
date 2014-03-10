@@ -27,7 +27,7 @@
 from distutils.core import setup
 
 setup(name="ppamltracer-python",
-      version="0.2.0",
+      version="0.2.1",
       description="ppamltracer Python bindings",
       author="Benjamin Barenblat",
       author_email="bbarenblat@galois.com",

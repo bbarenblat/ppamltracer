@@ -25,7 +25,7 @@
 
 cabal-version:       >=1.10
 name:                ppamltracer
-version:             0.2.0
+version:             0.2.1
 synopsis:            A lightweight tracing library
 description: ppamltracer is a lightweight tracing library designed for explicit
  instrumention of generated code. If you’re writing a compiler and need hard
