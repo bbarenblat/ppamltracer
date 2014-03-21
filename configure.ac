@@ -41,6 +41,7 @@ AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 AC_PROG_CC_C99
+AM_PROG_CC_C_O
 # Automake 1.12 seems to require this, but automake 1.11 doesn't recognize it.
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT
