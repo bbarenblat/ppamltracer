@@ -49,6 +49,12 @@ LT_INIT
 # Dependencies
 AC_CHECK_HEADERS([unistd.h])
 AC_CHECK_TYPE([clockid_t])
+# glibc 2.17 moved 'clock_gettime' (and the other 'clock_' functions) into the
+# main C library, but pre-2.17, you needed to link with '-lrt'.  (See
+# https://blog.flameeyes.eu/2012/12/glibc-2-17-what-s-going-to-be-a-trouble.)
+# Search for 'clock_gettime', and if it doesn't exist, add 'rt' to the link
+# list.
+AC_SEARCH_LIBS([clock_gettime], [rt])
 GALOIS_PPAML_LIB_OPENTRACE(
 	[],
 	[AC_MSG_ERROR([both OTF development libraries and the 'otfconfig' program are required.  You can install them from <http://tu-dresden.de/die_tu_dresden/zentrale_einrichtungen/zih/forschung/projekte/otf>.])])
