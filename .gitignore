@@ -27,6 +27,7 @@ ltmain.sh
 # automake
 Makefile.in
 ar-lib
+compile
 config.guess
 config.sub
 depcomp
